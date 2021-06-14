@@ -11,30 +11,30 @@ class DraggableListItem extends StatelessWidget {
   final Data data;
   final int index;
 
-  final double draggedHeight;
+  final double? draggedHeight;
   final CanDrag canDrag;
   final OnDragStarted onDragStarted;
   final VoidCallback onDragCompleted;
   final MyDragTargetAccept onAccept;
   final ValueChanged<Offset> onMove;
-  final VoidCallback cancelCallback;
+  final VoidCallback? cancelCallback;
 
-  final double dragElevation;
+  final double? dragElevation;
 
   final Widget child;
 
   DraggableListItem({
-    Key key,
-    this.data,
-    this.index,
-    this.canDrag,
-    this.onDragStarted,
-    this.onDragCompleted,
-    this.onAccept,
-    this.onMove,
+    Key? key,
+    required this.data,
+    required this.index,
+    required this.canDrag,
+    required this.onDragStarted,
+    required this.onDragCompleted,
+    required this.onAccept,
+    required this.onMove,
     this.cancelCallback,
     this.draggedHeight,
-    this.child,
+    required this.child,
     this.dragElevation,
   }) : super(key: key);
 
@@ -56,14 +56,14 @@ class DraggableListItem extends StatelessWidget {
           },
           onDragCompleted: onDragCompleted,
           onMyDraggableCanceled: (_, _2) {
-            cancelCallback();
+            cancelCallback!();
           });
     }
   }
 
   Widget _getListChild(BuildContext context) {
-    double nextTop = 0.0;
-    double nextBot = 0.0;
+    double? nextTop = 0.0;
+    double? nextBot = 0.0;
     if (data.isExtraAtTop) {
       nextTop = data.extraHeight;
     } else {
@@ -100,7 +100,7 @@ class DraggableListItem extends StatelessWidget {
         alignment: FractionalOffset.bottomRight,
         child: Material(
           child: child,
-          elevation: dragElevation,
+          elevation: dragElevation!,
           color: Colors.transparent,
           borderRadius: BorderRadius.zero,
         ),
@@ -111,7 +111,7 @@ class DraggableListItem extends StatelessWidget {
 
 class Data {
   int index;
-  double extraHeight;
+  double? extraHeight;
   bool isExtraAtTop;
 
   Data(

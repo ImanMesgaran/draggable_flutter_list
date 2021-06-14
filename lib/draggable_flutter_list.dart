@@ -13,9 +13,9 @@ class DragAndDropList extends StatefulWidget {
 
   final WidgetMaker itemBuilder;
 
-  final CanDrag canDrag;
+  final CanDrag? canDrag;
 
-  final OnDragFinish onDragFinish;
+  final OnDragFinish? onDragFinish;
 
   final CanAccept canBeDraggedTo;
 
@@ -26,10 +26,10 @@ class DragAndDropList extends StatefulWidget {
   final ScrollController scrollController;
 
   DragAndDropList(this.rowsCount,
-      {Key key,
-      @required this.itemBuilder,
+      {Key? key,
+      required this.itemBuilder,
       this.onDragFinish,
-      @required this.canBeDraggedTo,
+      required this.canBeDraggedTo,
       this.dragElevation = 0.0,
       this.canDrag,
       scrollController})
@@ -51,17 +51,17 @@ class _DragAndDropListState extends State<DragAndDropList> {
   List<Data> rows = <Data>[];
 
   //Index of the item dragged
-  int _currentDraggingIndex;
+  int? _currentDraggingIndex;
 
   // The height of the item being dragged
-  double dragHeight;
+  double? dragHeight;
 
-  SliverMultiBoxAdaptorElement renderSliverContext;
+  SliverMultiBoxAdaptorElement? renderSliverContext;
 
-  Offset _currentMiddle;
+  Offset? _currentMiddle;
 
   //Index of the item currently accepting
-  int _currentIndex;
+  int? _currentIndex;
 
   bool isScrolling = false;
 
@@ -151,11 +151,11 @@ class _DragAndDropListState extends State<DragAndDropList> {
       index: index,
       dragElevation: widget.dragElevation,
       draggedHeight: dragHeight,
-      canDrag: widget.canDrag,
+      canDrag: widget.canDrag!,
       onDragStarted:
           (double draggedHeight, double globalTopPositionOfDraggedItem) {
         _currentDraggingIndex = index;
-        RenderBox rend = context3.findRenderObject();
+        RenderBox rend = context3.findRenderObject() as RenderBox;
         double start = rend.localToGlobal(new Offset(0.0, 0.0)).dy;
 //        double end = rend.localToGlobal(new Offset(0.0, rend.semanticBounds.height)).dy;
 
@@ -169,7 +169,7 @@ class _DragAndDropListState extends State<DragAndDropList> {
 
         // _buildOverlay(context2, start, end);
 
-        renderSliverContext = context2;
+        renderSliverContext = context2 as SliverMultiBoxAdaptorElement?;
         updatePlaceholder();
         dragHeight = draggedHeight;
 
@@ -224,7 +224,7 @@ class _DragAndDropListState extends State<DragAndDropList> {
     middleOfItemInGlobalPosition = 0.0;
   }
 
-  void _accept(int toIndex, int fromIndex) {
+  void _accept(int? toIndex, int? fromIndex) {
     if (_currentIndex == null || _currentMiddle == null) {
       setState(() {
         populateRowList();
@@ -235,14 +235,14 @@ class _DragAndDropListState extends State<DragAndDropList> {
     setState(() {
       shouldScrollDown = false;
       shouldScrollUp = false;
-      if (fromIndex < rows.length) {
+      if (fromIndex! < rows.length) {
         rows[fromIndex].extraHeight = 0.0;
       }
 
-      if (_currentMiddle.dy >= _currentScrollPos || rows.length == 0) {
-        widget.onDragFinish(_currentDraggingIndex, toIndex);
+      if (_currentMiddle!.dy >= _currentScrollPos || rows.length == 0) {
+        widget.onDragFinish!(_currentDraggingIndex!, toIndex!);
       } else {
-        widget.onDragFinish(_currentDraggingIndex, toIndex + 1);
+        widget.onDragFinish!(_currentDraggingIndex!, toIndex! + 1);
       }
       populateRowList();
     });
@@ -252,9 +252,9 @@ class _DragAndDropListState extends State<DragAndDropList> {
   void updatePlaceholder() {
     if (renderSliverContext == null) return;
     if (_currentDraggingIndex == null) return;
-    RenderSliverList it = renderSliverContext.findRenderObject();
+    RenderSliverList it = renderSliverContext!.findRenderObject() as RenderSliverList;
     double buffer = sliverStartPos;
-    RenderBox currentChild = it.firstChild;
+    RenderBox? currentChild = it.firstChild;
     print('current child $currentChild');
     if (currentChild == null) {
       return;
@@ -270,18 +270,18 @@ class _DragAndDropListState extends State<DragAndDropList> {
             sliverStartPos;
       }
     }
-    double middle = buffer - currentChild.size.height / 2;
+    double middle = buffer - currentChild!.size.height / 2;
 
     int index = it.indexOf(currentChild);
 
-    if (!widget.canBeDraggedTo(_currentDraggingIndex, index)) return;
+    if (!widget.canBeDraggedTo(_currentDraggingIndex!, index)) return;
 
     _currentMiddle = new Offset(0.0, middle);
 
     final previousIndex = _currentIndex;
     final nextIndex = index;
     _currentIndex = index;
-    final atTop = _currentScrollPos <= _currentMiddle.dy;
+    final atTop = _currentScrollPos <= _currentMiddle!.dy;
 
     if (nextIndex < rows.length &&
         previousIndex == nextIndex &&
@@ -293,7 +293,7 @@ class _DragAndDropListState extends State<DragAndDropList> {
     bool needUpdate = false;
 
     if (previousIndex != null && previousIndex < rows.length) {
-      if (rows[previousIndex].extraHeight > 0.1) {
+      if (rows[previousIndex].extraHeight! > 0.1) {
         rows[previousIndex].extraHeight = 0.0;
         needUpdate = true;
       }
@@ -301,7 +301,7 @@ class _DragAndDropListState extends State<DragAndDropList> {
 
     if (nextIndex < rows.length) {
       if (dragHeight != null &&
-          (absMinus(rows[nextIndex].extraHeight, dragHeight) > 0.1 ||
+          (absMinus(rows[nextIndex].extraHeight!, dragHeight!) > 0.1 ||
               rows[nextIndex].isExtraAtTop != atTop)) {
         rows[nextIndex].extraHeight = dragHeight;
         rows[nextIndex].isExtraAtTop = atTop;
