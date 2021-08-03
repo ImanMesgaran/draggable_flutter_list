@@ -212,8 +212,9 @@ class MyDraggable<T> extends StatefulWidget {
         return new VerticalMultiDragGestureRecognizer()..onStart = onStart;
 
       default:
+        return new VerticalMultiDragGestureRecognizer()..onStart = onStart;
     }
-    return new ImmediateMultiDragGestureRecognizer()..onStart = onStart;
+    //return new ImmediateMultiDragGestureRecognizer()..onStart = onStart;
   }
 
   @override
