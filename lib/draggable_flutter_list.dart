@@ -13,7 +13,7 @@ class DragAndDropList extends StatefulWidget {
 
   final WidgetMaker itemBuilder;
 
-  final CanDrag? canDrag;
+  final CanDrag canDrag;
 
   final OnDragFinish? onDragFinish;
 
@@ -31,7 +31,7 @@ class DragAndDropList extends StatefulWidget {
       this.onDragFinish,
       required this.canBeDraggedTo,
       this.dragElevation = 0.0,
-      this.canDrag,
+      required this.canDrag,
       scrollController})
       : this.scrollController = scrollController ?? ScrollController(),
         super(key: key);
@@ -151,7 +151,7 @@ class _DragAndDropListState extends State<DragAndDropList> {
       index: index,
       dragElevation: widget.dragElevation,
       draggedHeight: dragHeight,
-      canDrag: widget.canDrag!,
+      canDrag: widget.canDrag,
       onDragStarted:
           (double draggedHeight, double globalTopPositionOfDraggedItem) {
         _currentDraggingIndex = index;
@@ -252,7 +252,8 @@ class _DragAndDropListState extends State<DragAndDropList> {
   void updatePlaceholder() {
     if (renderSliverContext == null) return;
     if (_currentDraggingIndex == null) return;
-    RenderSliverList it = renderSliverContext!.findRenderObject() as RenderSliverList;
+    RenderSliverList it =
+        renderSliverContext!.findRenderObject() as RenderSliverList;
     double buffer = sliverStartPos;
     RenderBox? currentChild = it.firstChild;
     print('current child $currentChild');
