@@ -210,6 +210,8 @@ class MyDraggable<T> extends StatefulWidget {
         return new HorizontalMultiDragGestureRecognizer()..onStart = onStart;
       case Axis.vertical:
         return new VerticalMultiDragGestureRecognizer()..onStart = onStart;
+
+      default:
     }
     return new ImmediateMultiDragGestureRecognizer()..onStart = onStart;
   }

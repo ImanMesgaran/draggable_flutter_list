@@ -53,6 +53,7 @@ void testSwap() {
               });
             },
             canBeDraggedTo: (one, two) => true,
+            canDrag: (id) => true,
           ),
         );
       },
